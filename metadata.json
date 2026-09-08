@@ -1,0 +1,6 @@
+{
+  "name": "Smart Kitchen Inventory System",
+  "description": "Smart IoT kitchen inventory service with BLE weight sensor nodes, gateway hub, real-time inventory tracking, and endpoint integration roadmap.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
