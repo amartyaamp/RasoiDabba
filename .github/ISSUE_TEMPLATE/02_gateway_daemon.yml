@@ -1,0 +1,46 @@
+name: "Tier 2: Edge Gateway Hub Issue"
+description: "File an issue for Raspberry Pi Bluetooth scanning, Bleak daemon, or network adapters"
+title: "[GATEWAY] "
+labels: ["tier:gateway"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Tier 2 Central Edge Gateway (Raspberry Pi Bleak Client)
+  - type: dropdown
+    id: component
+    attributes:
+      label: Gateway Component
+      options:
+        - Bleak BLE Scanner / Auto-Reconnect
+        - REST Ingress Dispatcher
+        - SQLite Offline Packet Buffer
+        - MQTT Adapter (Home Assistant)
+        - Firebase Realtime Adapter
+        - Systemd Daemon Service
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem or Feature Description
+    validations:
+      required: true
+  - type: textarea
+    id: packet_sample
+    attributes:
+      label: Sample Telemetry Frame / Log Output
+      placeholder: |
+        {
+          "container_id": "jar_001",
+          "raw_weight_g": 320,
+          "battery_v": 3.8
+        }
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Validation Checklist
+      options:
+        - label: Validated against local /api/telemetry endpoint
+        - label: Handles disconnection / Bluetooth adapter dropouts gracefully
+        - label: Tested buffer replay after network recovery

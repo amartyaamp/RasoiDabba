@@ -1,0 +1,42 @@
+name: "Tier 1: Hardware Node & Sensor Issue"
+description: "File an issue for ESP32 firmware, HX711 load cell calibration, or power optimization"
+title: "[HW] "
+labels: ["tier:hardware", "hardware-blocker"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Tier 1 Sensor Node Issue (ESP32 + HX711 + Strain Gauge Puck)
+  - type: dropdown
+    id: component
+    attributes:
+      label: Hardware Component
+      options:
+        - ESP32 Microcontroller
+        - HX711 24-bit ADC Amplifier
+        - Strain Gauge Load Cell (1kg/5kg)
+        - Power / LiPo Battery Circuit
+        - 3D Printed Base Enclosure
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description of Feature or Defect
+      description: What needs to be built, calibrated, or fixed?
+    validations:
+      required: true
+  - type: textarea
+    id: test_evidence
+    attributes:
+      label: Bench Test Results / Serial Logs
+      description: Include serial baud logs or ADC raw reading output if applicable.
+      placeholder: "e.g. HX711 raw reading drift observed at 3.3V vs 3.7V battery level..."
+  - type: checkboxes
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance Criteria
+      options:
+        - label: Calibrated with known test weight (500g)
+        - label: Deep sleep power verified with multimeter (<25µA)
+        - label: Transmits correct GATT 0xDEF1 characteristic payload

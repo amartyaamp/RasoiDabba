@@ -44,23 +44,3 @@ export interface HubStatus {
   last_heartbeat: number;
 }
 
-export interface RoadmapPhase {
-  id: string;
-  phase: number;
-  title: string;
-  subtitle: string;
-  status: 'completed' | 'in-progress' | 'upcoming';
-  description: string;
-  deliverables: string[];
-  specs: {
-    protocol?: string;
-    payloadFormat?: string;
-    endpoint?: string;
-  };
-  codeSnippet: {
-    language: string;
-    filename: string;
-    title: string;
-    code: string;
-  };
-}

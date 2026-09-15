@@ -1,0 +1,41 @@
+name: "Tier 3 & 4: Ingress API or Web UI Feature"
+description: "File an issue for Node/Express API, tare math, alerts, or the React client"
+title: "[APP] "
+labels: ["tier:backend", "simulator-ready"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Tier 3/4 Application Layer (Express Ingress, SSE Bus, or React UI)
+  - type: dropdown
+    id: layer
+    attributes:
+      label: System Layer
+      options:
+        - Ingress Endpoint (POST /api/telemetry)
+        - Tare Calibration (POST /api/containers/:id/tare)
+        - Server-Sent Events (/api/events)
+        - Low-Stock & Critical Alerts Engine
+        - Pantry Inventory Dashboard
+        - Node Simulator Workbench
+    validations:
+      required: true
+  - type: textarea
+    id: user_story
+    attributes:
+      label: User Story / Functional Description
+      placeholder: "As a kitchen cook, I want to..."
+    validations:
+      required: true
+  - type: textarea
+    id: endpoint_contract
+    attributes:
+      label: Expected Request / Response Schema
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Definition of Done
+      options:
+        - label: Validated with Endpoint Tester tab or curl
+        - label: Linter and compilation pass (tsc --noEmit && npm run build)
+        - label: Responsive on mobile and tablet viewport

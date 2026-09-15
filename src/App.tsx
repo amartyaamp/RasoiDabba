@@ -1,17 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Header } from './components/Header';
-import { InventoryView } from './components/InventoryView';
-import { NodeSimulator } from './components/NodeSimulator';
-import { EndpointTester } from './components/EndpointTester';
-import { RoadmapView } from './components/RoadmapView';
+import { StatusView } from './components/StatusView';
 import { AlertsView } from './components/AlertsView';
 import { EditContainerModal } from './components/EditContainerModal';
 import { AddContainerModal } from './components/AddContainerModal';
 import { ContainerNode, AlertNotification, HubStatus } from './types';
-import { AlertCircle, CheckCircle2, WifiOff } from 'lucide-react';
+import { AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'inventory' | 'simulator' | 'endpoint' | 'roadmap' | 'alerts'>('inventory');
+  const [activeTab, setActiveTab] = useState<'status' | 'alerts'>('status');
   const [containers, setContainers] = useState<ContainerNode[]>([]);
   const [alerts, setAlerts] = useState<AlertNotification[]>([]);
   const [hubStatus, setHubStatus] = useState<HubStatus>({
@@ -187,32 +184,6 @@ export default function App() {
     }
   };
 
-  const handleSimulatePour = async (id: string, deltaG: number) => {
-    try {
-      await fetch(`/api/containers/${id}/simulate-pour`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ delta_g: deltaG }),
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleSendTelemetry = async (payload: {
-    container_id: string;
-    raw_weight_g: number;
-    battery_v: number;
-    rssi: number;
-  }) => {
-    const res = await fetch('/api/telemetry', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-    return res.json();
-  };
-
   const handleSaveContainer = async (updated: Partial<ContainerNode>) => {
     if (!editingContainer) return;
     try {
@@ -251,19 +222,6 @@ export default function App() {
     }
   };
 
-  const handleChangeAdapter = async (mode: 'rest' | 'firebase' | 'mqtt') => {
-    try {
-      await fetch('/api/hub/adapter', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mode }),
-      });
-      showToast(`Hub network adapter swapped to "${mode.toUpperCase()}"`, 'info');
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   const handleClearAlerts = async () => {
     try {
       await fetch('/api/alerts/clear', { method: 'POST' });
@@ -283,7 +241,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-stone-50/80 text-stone-900 flex flex-col font-sans selection:bg-stone-900 selection:text-white">
-      {/* Header with Navigation and System Telemetry */}
+      {/* Clean Header with Two Main Views */}
       <Header
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -296,29 +254,16 @@ export default function App() {
 
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {activeTab === 'inventory' && (
-          <InventoryView
+        {activeTab === 'status' && (
+          <StatusView
             containers={containers}
+            hubStatus={hubStatus}
+            sseConnected={sseConnected}
             onTare={handleTare}
-            onSimulatePour={handleSimulatePour}
             onEdit={(c) => setEditingContainer(c)}
-            onDelete={handleDeleteContainer}
             onAddNew={() => setIsAddModalOpen(true)}
           />
         )}
-
-        {activeTab === 'simulator' && (
-          <NodeSimulator
-            containers={containers}
-            hubStatus={hubStatus}
-            onSendTelemetry={handleSendTelemetry}
-            onChangeAdapter={handleChangeAdapter}
-          />
-        )}
-
-        {activeTab === 'endpoint' && <EndpointTester />}
-
-        {activeTab === 'roadmap' && <RoadmapView />}
 
         {activeTab === 'alerts' && (
           <AlertsView
@@ -330,15 +275,15 @@ export default function App() {
         )}
       </main>
 
-      {/* Footer */}
+      {/* Clean Status Footer */}
       <footer className="border-t border-stone-200 bg-white py-4 text-xs text-stone-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center space-x-2">
             <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
-            <span>Smart Kitchen Ingress Service &bull; Port 3000</span>
+            <span>Kitchen Inventory Sensor System &bull; Live Telemetry</span>
           </div>
           <div className="text-stone-400">
-            BLE Load Cells &bull; Edge Gateway &bull; Decoupled Network Adapters (REST / Firebase / MQTT)
+            BLE Weight Nodes &bull; Central Gateway Hub &bull; Automatic Low-Stock Detection
           </div>
         </div>
       </footer>
